@@ -201,26 +201,6 @@ body {
     transform: scale(0.98);
 }
 
-.car-card-image {
-    width: 80px;
-    min-height: 72px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
-    flex-shrink: 0;
-}
-
-.car-card-image .type-badge {
-    display: none;
-}
-
-.car-card-image svg {
-    width: 70px !important;
-    max-width: 70px !important;
-    position: static !important;
-}
 
 .car-card-body {
     padding: 8px 10px;

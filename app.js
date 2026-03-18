@@ -689,13 +689,8 @@ function renderCarCard(car) {
     div.className = "car-card";
     div.onclick = () => openModal(car.id);
 
-    const bc = BRAND_COLORS[car.make] || { gradient: "linear-gradient(135deg, #333, #0a0a0a)" };
     const src = BRAND_SOURCES[car.make];
     div.innerHTML = `
-        <div class="car-card-image" style="background: ${bc.gradient}">
-            ${getCarSilhouette(car.type)}
-            ${getBrandLogo(car.make, true)}
-        </div>
         <div class="car-card-body">
             <div class="car-card-title">${car.make} ${car.model}</div>
             <div class="car-card-year">${car.year}${src ? ` · <a href="${src.url}" target="_blank" rel="noopener" class="source-link" onclick="event.stopPropagation()">Kilde: ${src.name}</a>` : ''}</div>
