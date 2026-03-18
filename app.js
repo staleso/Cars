@@ -853,14 +853,9 @@ function openModal(id) {
     if (!car) return;
 
     const modal = document.getElementById("car-modal");
-    const image = document.getElementById("modal-image");
     const body = document.getElementById("modal-body");
 
-    const bc = BRAND_COLORS[car.make] || { gradient: "linear-gradient(135deg, #333, #0a0a0a)" };
     const src = BRAND_SOURCES[car.make];
-    image.style.background = bc.gradient;
-    image.style.position = "relative";
-    image.innerHTML = `${getCarSilhouette(car.type)}${getBrandLogo(car.make)}`;
 
     body.innerHTML = `
         <div class="modal-title">${car.make} ${car.model}</div>
@@ -961,7 +956,6 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("filter-sort").addEventListener("change", renderBrowse);
 
     // Modal close
-    document.getElementById("modal-close").addEventListener("click", closeModal);
     document.getElementById("modal-back").addEventListener("click", closeModal);
     document.getElementById("car-modal").addEventListener("click", (e) => {
         if (e.target === e.currentTarget) closeModal();

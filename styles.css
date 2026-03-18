@@ -498,38 +498,6 @@ body {
     opacity: 0.85;
 }
 
-.modal-header {
-    position: relative;
-}
-
-.modal-close {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    width: 32px;
-    height: 32px;
-    border: none;
-    border-radius: 16px;
-    background: rgba(0,0,0,0.5);
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.modal-car-image {
-    height: 200px;
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    font-size: 100px;
-    position: relative;
-    overflow: hidden;
-}
-
 .modal-body {
     padding: 20px;
 }
