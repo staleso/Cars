@@ -633,8 +633,9 @@ body {
     transform: scale(1.3);
 }
 
-.star-filled {
+.star-selected {
     color: #FFD700;
+    text-shadow: 0 0 6px #FFD70040;
 }
 
 .star-empty {
