@@ -484,6 +484,29 @@ const BRAND_COLORS = {
     "Smart":      { primary: "#FF7900", gradient: "linear-gradient(135deg, #FF7900, #994800)" }
 };
 
+// ========== Brand Sources ==========
+const BRAND_SOURCES = {
+    "BMW":        { name: "bmw.no", url: "https://www.bmw.no/no/alle-modeller.html" },
+    "Audi":       { name: "audi.no", url: "https://www.audi.no/no/web/no/modeller.html" },
+    "Mercedes":   { name: "mercedes-benz.no", url: "https://www.mercedes-benz.no/passengercars.html" },
+    "Porsche":    { name: "porsche.no", url: "https://www.porsche.com/norway/models/" },
+    "Tesla":      { name: "tesla.com/no", url: "https://www.tesla.com/no_no" },
+    "Volkswagen": { name: "volkswagen.no", url: "https://www.volkswagen.no/no/modeller.html" },
+    "Volvo":      { name: "volvocars.com/no", url: "https://www.volvocars.com/no/cars/" },
+    "Hyundai":    { name: "hyundai.no", url: "https://www.hyundai.com/no/modeller.html" },
+    "Kia":        { name: "kia.com/no", url: "https://www.kia.com/no/modeller.html" },
+    "Skoda":      { name: "skoda.no", url: "https://www.skoda.no/modeller" },
+    "Polestar":   { name: "polestar.com/no", url: "https://www.polestar.com/no/" },
+    "NIO":        { name: "nio.com/no", url: "https://www.nio.com/no_NO" },
+    "Toyota":     { name: "toyota.no", url: "https://www.toyota.no/biler" },
+    "Ford":       { name: "ford.no", url: "https://www.ford.no/elbiler" },
+    "Xpeng":      { name: "xpeng.com/no", url: "https://www.xpeng.com/no" },
+    "BYD":        { name: "byd.com/no", url: "https://www.byd.com/no" },
+    "Cupra":      { name: "cupraofficial.no", url: "https://www.cupraofficial.no/modeller.html" },
+    "Renault":    { name: "renault.no", url: "https://www.renault.no/elektriske-biler.html" },
+    "Smart":      { name: "smart.com/no", url: "https://www.smart.com/no" }
+};
+
 // ========== SVG Car Silhouettes ==========
 function getCarSilhouette(type) {
     const color = "rgba(255,255,255,0.15)";
@@ -637,6 +660,7 @@ function renderCarCard(car) {
     div.onclick = () => openModal(car.id);
 
     const bc = BRAND_COLORS[car.make] || { gradient: "linear-gradient(135deg, #333, #0a0a0a)" };
+    const src = BRAND_SOURCES[car.make];
     div.innerHTML = `
         <div class="car-card-image" style="background: ${bc.gradient}">
             ${getCarSilhouette(car.type)}
@@ -644,7 +668,7 @@ function renderCarCard(car) {
         </div>
         <div class="car-card-body">
             <div class="car-card-title">${car.make} ${car.model}</div>
-            <div class="car-card-year">${car.year}</div>
+            <div class="car-card-year">${car.year}${src ? ` · <a href="${src.url}" target="_blank" rel="noopener" class="source-link" onclick="event.stopPropagation()">Kilde: ${src.name}</a>` : ''}</div>
             <div class="car-card-specs">
                 <span class="spec-pill"><span class="val">${car.range}</span> km</span>
                 <span class="spec-pill"><span class="val">${car.hp}</span> hk</span>
@@ -801,6 +825,7 @@ function openModal(id) {
     const body = document.getElementById("modal-body");
 
     const bc = BRAND_COLORS[car.make] || { gradient: "linear-gradient(135deg, #333, #0a0a0a)" };
+    const src = BRAND_SOURCES[car.make];
     image.style.background = bc.gradient;
     image.style.position = "relative";
     image.innerHTML = `${getCarSilhouette(car.type)}${getBrandLogo(car.make)}`;
@@ -809,6 +834,7 @@ function openModal(id) {
         <div class="modal-title">${car.make} ${car.model}</div>
         <div class="modal-year">${car.year} · ${car.segment}</div>
         <div class="modal-price">${formatPrice(car.price)}</div>
+        ${src ? `<a href="${src.url}" target="_blank" rel="noopener" class="modal-source-link">Kilde: ${src.name}</a>` : ''}
 
         <div class="modal-section-title">Ytelse</div>
         <div class="modal-specs-grid">
