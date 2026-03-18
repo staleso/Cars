@@ -614,6 +614,33 @@ body {
     height: 0;
 }
 
+/* ========== Source Links ========== */
+.source-link {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 10px;
+    opacity: 0.7;
+}
+
+.source-link:hover {
+    opacity: 1;
+    text-decoration: underline;
+}
+
+.modal-source-link {
+    display: inline-block;
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 13px;
+    margin-bottom: 8px;
+    opacity: 0.8;
+}
+
+.modal-source-link:hover {
+    opacity: 1;
+    text-decoration: underline;
+}
+
 /* ========== No Results ========== */
 .no-results {
     text-align: center;
