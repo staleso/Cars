@@ -839,23 +839,7 @@ function renderCompare() {
 
     const cars = state.compareList.map(getCarById).filter(Boolean);
 
-    // Header chips
-    const headerRow = document.getElementById("compare-header-row");
-    headerRow.innerHTML = cars.map(car => {
-        const bc = BRAND_COLORS[car.make] || { primary: "#888" };
-        return `
-        <div class="compare-car-chip">
-            <span class="chip-emoji" style="color:${bc.primary};font-size:16px;font-weight:800;">${car.make.substring(0,3).toUpperCase()}</span>
-            <div class="chip-info">
-                <div class="chip-name">${car.make} ${car.model}</div>
-                <div class="chip-price">${formatPrice(car.price)}</div>
-            </div>
-            <button class="chip-remove" onclick="toggleCompare(${car.id})">✕</button>
-        </div>
-    `;
-    }).join("");
-
-    // Comparison rows
+    // Comparison table with header row
     const specs = [
         { label: "Pris", key: "price", format: v => formatPrice(v), best: "low" },
         { label: "Rekkevidde", key: "range", format: v => v + " km", best: "high" },
@@ -868,7 +852,24 @@ function renderCompare() {
     ];
 
     const table = document.getElementById("compare-table");
-    table.innerHTML = specs.map(spec => {
+
+    // Header row with car names and remove buttons
+    const headerCells = cars.map(car => {
+        const bc = BRAND_COLORS[car.make] || { primary: "#888" };
+        return `<div class="compare-cell compare-header-cell">
+            <div class="compare-car-name" style="color:${bc.primary}">${car.make}</div>
+            <div class="compare-car-model">${car.model}</div>
+            <button class="chip-remove" onclick="toggleCompare(${car.id})">✕</button>
+        </div>`;
+    }).join("");
+
+    const headerRow = `<div class="compare-row header-row">
+        <div class="compare-cell label-cell"></div>
+        ${headerCells}
+    </div>`;
+
+    // Spec rows
+    const specRows = specs.map(spec => {
         const values = cars.map(c => c[spec.key]);
         let bestVal = null;
         if (spec.best === "high") bestVal = Math.max(...values);
@@ -887,6 +888,8 @@ function renderCompare() {
             </div>
         `;
     }).join("");
+
+    table.innerHTML = headerRow + specRows;
 }
 
 // ========== Favorites Tab ==========
