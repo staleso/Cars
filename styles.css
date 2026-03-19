@@ -542,42 +542,6 @@ body {
 
 .modal-ad-banner {
     margin-top: 20px;
-    padding: 20px 16px;
-    background: linear-gradient(135deg, var(--surface2), var(--surface));
-    border: 2px dashed var(--border);
-    border-radius: 12px;
-    text-align: center;
-}
-
-.ad-label {
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    color: var(--text2);
-    margin-bottom: 6px;
-}
-
-.ad-text {
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--text);
-    margin-bottom: 10px;
-}
-
-.ad-cta {
-    display: inline-block;
-    padding: 6px 16px;
-    background: var(--accent);
-    color: #fff;
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: opacity 0.15s;
-}
-
-.ad-cta:hover {
-    opacity: 0.85;
 }
 
 .modal-btn {

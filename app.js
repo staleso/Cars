@@ -993,13 +993,18 @@ function openModal(id) {
         </div>
 
         <div class="modal-ad-banner">
-            <div class="ad-label">ANNONSEPLASS</div>
-            <div class="ad-text">Her kan du bestille reklame</div>
-            <a href="mailto:tilbakemelding@example.com?subject=Reklame%20i%20appen" class="ad-cta">Kontakt oss</a>
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-4678480487049419"
+                 data-ad-slot="auto"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
         </div>
     `;
 
     modal.classList.add("open");
+
+    try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
 }
 
 function closeModal() {
