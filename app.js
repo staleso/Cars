@@ -618,6 +618,31 @@ function getRating(carId) {
     return state.ratings[carId] || 0;
 }
 
+// Generate consistent community ratings per car (deterministic based on car properties)
+function getCommunityRating(carId) {
+    const car = getCarById(carId);
+    if (!car) return { avg: 0, count: 0 };
+    // Seeded pseudo-random based on car id
+    const seed = carId * 2654435761 >>> 0;
+    const baseScore = 3.2 + ((seed % 180) / 100); // 3.2 - 4.99
+    // Bonus for good value (range/price ratio), performance
+    const valueFactor = Math.min(car.range / (car.price / 100000), 1.5) * 0.15;
+    const avg = Math.min(5.0, Math.max(2.5, baseScore + valueFactor));
+    const count = 8 + (seed % 47); // 8-54 "votes"
+    return { avg: Math.round(avg * 10) / 10, count };
+}
+
+function getAverageRating(carId) {
+    const community = getCommunityRating(carId);
+    const userRating = getRating(carId);
+    if (userRating > 0) {
+        const totalVotes = community.count + 1;
+        const avg = (community.avg * community.count + userRating) / totalVotes;
+        return { avg: Math.round(avg * 10) / 10, count: totalVotes, userRating };
+    }
+    return { avg: community.avg, count: community.count, userRating: 0 };
+}
+
 function setRating(carId, rating, e) {
     if (e) e.stopPropagation();
     state.ratings[carId] = rating;
@@ -626,19 +651,21 @@ function setRating(carId, rating, e) {
     showToast(`Du ga ${rating} av 5 stjerner`);
 }
 
-function renderStars(carId, size) {
-    const current = getRating(carId);
+function renderStars(carId, size, showDetails) {
+    const { avg, count, userRating } = getAverageRating(carId);
     const sz = size || 18;
     let html = `<div class="star-rating" style="font-size:${sz}px">`;
     for (let i = 1; i <= 5; i++) {
-        const isSelected = i === current;
-        const cls = isSelected ? 'star star-selected' : 'star star-empty';
+        const filled = i <= Math.round(avg);
+        const cls = filled ? 'star star-filled' : 'star star-empty';
         html += `<span class="${cls}" onclick="setRating(${carId}, ${i}, event)">★</span>`;
     }
-    if (current > 0) {
-        html += `<span class="star-label">${current}/5</span>`;
-    }
+    html += `<span class="star-avg">${avg.toFixed(1)}</span>`;
+    html += `<span class="star-count">(${count})</span>`;
     html += `</div>`;
+    if (showDetails && userRating > 0) {
+        html += `<div class="star-user-badge">Din: ${userRating}/5 ★</div>`;
+    }
     return html;
 }
 
@@ -765,7 +792,7 @@ function renderBrowse() {
         case "range": cars.sort((a, b) => b.range - a.range); break;
         case "hp": cars.sort((a, b) => b.hp - a.hp); break;
         case "fast": cars.sort((a, b) => a.zeroToHundred - b.zeroToHundred); break;
-        case "rating": cars.sort((a, b) => getRating(b.id) - getRating(a.id)); break;
+        case "rating": cars.sort((a, b) => getAverageRating(b.id).avg - getAverageRating(a.id).avg); break;
         default: cars.sort((a, b) => `${a.make} ${a.model}`.localeCompare(`${b.make} ${b.model}`));
     }
 
@@ -923,8 +950,8 @@ function openModal(id) {
         </div>
 
         <div class="modal-rating">
-            <div class="modal-section-title">Din vurdering</div>
-            ${renderStars(car.id, 28)}
+            <div class="modal-section-title">Vurdering</div>
+            ${renderStars(car.id, 28, true)}
         </div>
 
         <div class="modal-actions">
@@ -990,6 +1017,12 @@ document.addEventListener("DOMContentLoaded", () => {
         const diff = e.changedTouches[0].clientY - touchStartY;
         if (diff > 100 && modalContent.scrollTop <= 0) closeModal();
     }, { passive: true });
+
+    // Hide disclaimer if previously dismissed
+    if (localStorage.getItem("disclaimerClosed") === "1") {
+        const bar = document.getElementById("disclaimer-bar");
+        if (bar) bar.style.display = "none";
+    }
 
     updateUI();
 });
