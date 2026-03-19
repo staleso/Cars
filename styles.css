@@ -540,6 +540,10 @@ body {
     line-height: 1.5;
 }
 
+.modal-ad-banner {
+    margin-top: 20px;
+}
+
 .modal-btn {
     flex: 1;
     padding: 14px;

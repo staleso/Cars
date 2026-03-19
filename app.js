@@ -991,9 +991,20 @@ function openModal(id) {
         <div class="modal-disclaimer">
             Informasjonen er veiledende og kan inneholde feil. Priser og spesifikasjoner kan avvike fra faktiske verdier. Kontakt alltid forhandler for bekreftede opplysninger.
         </div>
+
+        <div class="modal-ad-banner">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-4678480487049419"
+                 data-ad-slot="auto"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+        </div>
     `;
 
     modal.classList.add("open");
+
+    try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
 }
 
 function closeModal() {
