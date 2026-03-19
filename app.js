@@ -991,6 +991,12 @@ function openModal(id) {
         <div class="modal-disclaimer">
             Informasjonen er veiledende og kan inneholde feil. Priser og spesifikasjoner kan avvike fra faktiske verdier. Kontakt alltid forhandler for bekreftede opplysninger.
         </div>
+
+        <div class="modal-ad-banner">
+            <div class="ad-label">ANNONSEPLASS</div>
+            <div class="ad-text">Her kan du bestille reklame</div>
+            <a href="mailto:tilbakemelding@example.com?subject=Reklame%20i%20appen" class="ad-cta">Kontakt oss</a>
+        </div>
     `;
 
     modal.classList.add("open");
