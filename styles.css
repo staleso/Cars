@@ -654,6 +654,31 @@ body {
     font-size: 13px;
 }
 
+/* ========== News Links ========== */
+.modal-news-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0 0 8px;
+}
+
+.news-link {
+    display: inline-block;
+    padding: 6px 12px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.15s;
+}
+
+.news-link:hover {
+    background: var(--surface3);
+}
+
 /* ========== Footer Disclaimer ========== */
 .app-disclaimer {
     margin: 24px 16px;

@@ -669,6 +669,21 @@ function renderStars(carId, size, showDetails) {
     return html;
 }
 
+// ========== News Links ==========
+const NEWS_SITES = [
+    { name: "elbil24.no", searchUrl: "https://elbil24.no/?s=" },
+    { name: "tek.no", searchUrl: "https://www.tek.no/search?q=" },
+    { name: "dinside.no", searchUrl: "https://www.dinside.no/sok?q=" },
+    { name: "motor.no", searchUrl: "https://www.motor.no/sok?q=" }
+];
+
+function renderNewsLinks(car) {
+    const query = encodeURIComponent(`${car.make} ${car.model}`);
+    return NEWS_SITES.map(site =>
+        `<a href="${site.searchUrl}${query}" target="_blank" rel="noopener" class="news-link">${site.name}</a>`
+    ).join("");
+}
+
 // ========== Utility ==========
 function formatPrice(price) {
     return price.toLocaleString("nb-NO") + " kr";
@@ -947,6 +962,11 @@ function openModal(id) {
                 <div class="modal-spec-label">Pris/km</div>
                 <div class="modal-spec-value" style="font-size:14px">${(car.price / car.range).toFixed(0)} kr</div>
             </div>
+        </div>
+
+        <div class="modal-section-title">Nyheter og tester</div>
+        <div class="modal-news-links">
+            ${renderNewsLinks(car)}
         </div>
 
         <div class="modal-rating">
