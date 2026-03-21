@@ -1143,7 +1143,7 @@ function renderCompare() {
     }).join("");
 
     const headerRow = `<div class="compare-row header-row">
-        <div class="compare-cell label-cell"></div>
+        <div class="compare-cell label-cell" style="display:flex;align-items:center;font-size:11px;text-transform:uppercase;letter-spacing:0.8px;color:var(--accent)">Bil</div>
         ${headerCells}
     </div>`;
 
