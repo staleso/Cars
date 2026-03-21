@@ -1138,16 +1138,27 @@ function renderCompare() {
 
     const table = document.getElementById("compare-table");
 
-    // Header row with car names
-    const headerCells = cars.map(car => {
+    // Header row with car names — draggable
+    const headerCells = cars.map((car, idx) => {
         const bc = BRAND_COLORS[car.make] || { primary: "#888" };
-        return `<div class="compare-cell compare-header-cell">
+        return `<div class="compare-cell compare-header-cell" draggable="true" data-compare-idx="${idx}">
+            <div class="compare-drag-handle">⠿</div>
             <div class="compare-car-name" style="color:${bc.primary}">${car.make}</div>
             <div class="compare-car-model">${car.model}</div>
             <div class="compare-car-year">${car.year}</div>
             <button class="chip-remove" onclick="toggleCompare(${car.id})">✕</button>
         </div>`;
     }).join("");
+
+    // Sort buttons
+    const sortBar = `<div class="compare-sort-bar">
+        <span class="compare-sort-label">Sorter:</span>
+        <button class="compare-sort-btn" onclick="sortCompareBy('price')">Pris</button>
+        <button class="compare-sort-btn" onclick="sortCompareBy('range')">Rekkevidde</button>
+        <button class="compare-sort-btn" onclick="sortCompareBy('hp')">Effekt</button>
+        <button class="compare-sort-btn" onclick="sortCompareBy('zeroToHundred')">0-100</button>
+        <button class="compare-sort-btn" onclick="sortCompareBy('weight')">Vekt</button>
+    </div>`;
 
     const headerRow = `<div class="compare-row header-row">
         <div class="compare-cell label-cell" style="display:flex;align-items:center;font-size:11px;text-transform:uppercase;letter-spacing:0.8px;color:var(--accent)">Bil</div>
@@ -1187,7 +1198,88 @@ function renderCompare() {
         });
     });
 
-    table.innerHTML = headerRow + groupedRows;
+    table.innerHTML = sortBar + headerRow + groupedRows;
+    initCompareDragDrop();
+}
+
+// ========== Compare Sort ==========
+function sortCompareBy(key) {
+    const asc = ["price", "zeroToHundred", "weight"];
+    state.compareList.sort((a, b) => {
+        const ca = getCarById(a), cb = getCarById(b);
+        if (!ca || !cb) return 0;
+        return asc.includes(key) ? ca[key] - cb[key] : cb[key] - ca[key];
+    });
+    saveState();
+    renderCompare();
+}
+
+// ========== Compare Drag & Drop ==========
+function initCompareDragDrop() {
+    const cells = document.querySelectorAll(".compare-header-cell[draggable]");
+    let dragIdx = null;
+
+    cells.forEach(cell => {
+        // Mouse drag
+        cell.addEventListener("dragstart", e => {
+            dragIdx = parseInt(cell.dataset.compareIdx);
+            cell.classList.add("dragging");
+            e.dataTransfer.effectAllowed = "move";
+        });
+        cell.addEventListener("dragend", () => {
+            cell.classList.remove("dragging");
+            dragIdx = null;
+        });
+        cell.addEventListener("dragover", e => {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = "move";
+            cell.classList.add("drag-over");
+        });
+        cell.addEventListener("dragleave", () => {
+            cell.classList.remove("drag-over");
+        });
+        cell.addEventListener("drop", e => {
+            e.preventDefault();
+            cell.classList.remove("drag-over");
+            const dropIdx = parseInt(cell.dataset.compareIdx);
+            if (dragIdx !== null && dragIdx !== dropIdx) {
+                reorderCompare(dragIdx, dropIdx);
+            }
+        });
+
+        // Touch drag
+        let touchStartX = 0;
+        let touchStartIdx = null;
+        cell.addEventListener("touchstart", e => {
+            touchStartX = e.touches[0].clientX;
+            touchStartIdx = parseInt(cell.dataset.compareIdx);
+            cell.classList.add("dragging");
+        }, { passive: true });
+        cell.addEventListener("touchmove", e => {
+            // Visual feedback handled via CSS
+        }, { passive: true });
+        cell.addEventListener("touchend", e => {
+            cell.classList.remove("dragging");
+            const endX = e.changedTouches[0].clientX;
+            const diff = endX - touchStartX;
+            const cellWidth = cell.offsetWidth;
+            if (Math.abs(diff) > cellWidth * 0.4 && touchStartIdx !== null) {
+                const steps = Math.round(diff / cellWidth);
+                const target = Math.max(0, Math.min(state.compareList.length - 1, touchStartIdx + steps));
+                if (target !== touchStartIdx) {
+                    reorderCompare(touchStartIdx, target);
+                }
+            }
+            touchStartIdx = null;
+        }, { passive: true });
+    });
+}
+
+function reorderCompare(fromIdx, toIdx) {
+    const item = state.compareList.splice(fromIdx, 1)[0];
+    state.compareList.splice(toIdx, 0, item);
+    saveState();
+    renderCompare();
 }
 
 // ========== Favorites Tab ==========

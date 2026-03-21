@@ -457,6 +457,63 @@ body {
     font-weight: 700;
 }
 
+.compare-sort-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 10px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.compare-sort-label {
+    font-size: 11px;
+    color: var(--text2);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.compare-sort-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 12px;
+    cursor: pointer;
+    white-space: nowrap;
+    font-weight: 500;
+}
+
+.compare-sort-btn:active {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+}
+
+.compare-drag-handle {
+    font-size: 14px;
+    color: var(--text2);
+    opacity: 0.4;
+    cursor: grab;
+    line-height: 1;
+    letter-spacing: 1px;
+    user-select: none;
+}
+
+.compare-header-cell.dragging {
+    opacity: 0.4;
+}
+
+.compare-header-cell.drag-over {
+    background: rgba(0, 122, 255, 0.08);
+    border-left: 2px solid var(--accent);
+}
+
 /* ========== Modal ========== */
 .modal {
     position: fixed;
