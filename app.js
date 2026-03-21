@@ -39,6 +39,13 @@ const CARS = [
         emoji: "⚡", color: "#16213e", segment: "Mid-size SUV"
     },
     {
+        id: 100, make: "BMW", model: "i3 50 xDrive Sedan", year: 2026, price: 579900,
+        type: "sedan", hp: 469, kwh: 108, zeroToHundred: 4.0, seats: 5,
+        drivetrain: "AWD", battery: "108 kWh", range: 900,
+        length: 4760, width: 1865, height: 1480, weight: 2150,
+        emoji: "⚡", color: "#2e1a1a", segment: "Mid-size Sedan"
+    },
+    {
         id: 3, make: "BMW", model: "iX xDrive40", year: 2025, price: 799900,
         type: "suv", hp: 326, kwh: 76.6, zeroToHundred: 6.1, seats: 5,
         drivetrain: "AWD", battery: "76.6 kWh", range: 425,
