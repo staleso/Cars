@@ -495,23 +495,35 @@ body {
     border-color: var(--accent);
 }
 
-.compare-drag-handle {
-    font-size: 14px;
+.compare-move-row {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 4px;
+}
+
+.compare-move-btn {
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: var(--surface);
     color: var(--text2);
-    opacity: 0.4;
-    cursor: grab;
-    line-height: 1;
-    letter-spacing: 1px;
-    user-select: none;
+    border-radius: 8px;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
 }
 
-.compare-header-cell.dragging {
-    opacity: 0.4;
+.compare-move-btn:active {
+    background: var(--accent);
+    color: white;
 }
 
-.compare-header-cell.drag-over {
-    background: rgba(0, 122, 255, 0.08);
-    border-left: 2px solid var(--accent);
+.compare-move-btn.placeholder {
+    visibility: hidden;
 }
 
 /* ========== Modal ========== */

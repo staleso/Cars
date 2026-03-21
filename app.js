@@ -1138,11 +1138,17 @@ function renderCompare() {
 
     const table = document.getElementById("compare-table");
 
-    // Header row with car names — draggable
+    // Header row with car names — with move buttons
     const headerCells = cars.map((car, idx) => {
         const bc = BRAND_COLORS[car.make] || { primary: "#888" };
-        return `<div class="compare-cell compare-header-cell" draggable="true" data-compare-idx="${idx}">
-            <div class="compare-drag-handle">⠿</div>
+        const leftBtn = idx > 0
+            ? `<button class="compare-move-btn" onclick="moveCompare(${idx}, ${idx - 1})" aria-label="Flytt venstre">◀</button>`
+            : `<span class="compare-move-btn placeholder"></span>`;
+        const rightBtn = idx < cars.length - 1
+            ? `<button class="compare-move-btn" onclick="moveCompare(${idx}, ${idx + 1})" aria-label="Flytt høyre">▶</button>`
+            : `<span class="compare-move-btn placeholder"></span>`;
+        return `<div class="compare-cell compare-header-cell">
+            <div class="compare-move-row">${leftBtn}${rightBtn}</div>
             <div class="compare-car-name" style="color:${bc.primary}">${car.make}</div>
             <div class="compare-car-model">${car.model}</div>
             <div class="compare-car-year">${car.year}</div>
@@ -1199,7 +1205,6 @@ function renderCompare() {
     });
 
     table.innerHTML = sortBar + headerRow + groupedRows;
-    initCompareDragDrop();
 }
 
 // ========== Compare Sort ==========
@@ -1214,68 +1219,8 @@ function sortCompareBy(key) {
     renderCompare();
 }
 
-// ========== Compare Drag & Drop ==========
-function initCompareDragDrop() {
-    const cells = document.querySelectorAll(".compare-header-cell[draggable]");
-    let dragIdx = null;
-
-    cells.forEach(cell => {
-        // Mouse drag
-        cell.addEventListener("dragstart", e => {
-            dragIdx = parseInt(cell.dataset.compareIdx);
-            cell.classList.add("dragging");
-            e.dataTransfer.effectAllowed = "move";
-        });
-        cell.addEventListener("dragend", () => {
-            cell.classList.remove("dragging");
-            dragIdx = null;
-        });
-        cell.addEventListener("dragover", e => {
-            e.preventDefault();
-            e.dataTransfer.dropEffect = "move";
-            cell.classList.add("drag-over");
-        });
-        cell.addEventListener("dragleave", () => {
-            cell.classList.remove("drag-over");
-        });
-        cell.addEventListener("drop", e => {
-            e.preventDefault();
-            cell.classList.remove("drag-over");
-            const dropIdx = parseInt(cell.dataset.compareIdx);
-            if (dragIdx !== null && dragIdx !== dropIdx) {
-                reorderCompare(dragIdx, dropIdx);
-            }
-        });
-
-        // Touch drag
-        let touchStartX = 0;
-        let touchStartIdx = null;
-        cell.addEventListener("touchstart", e => {
-            touchStartX = e.touches[0].clientX;
-            touchStartIdx = parseInt(cell.dataset.compareIdx);
-            cell.classList.add("dragging");
-        }, { passive: true });
-        cell.addEventListener("touchmove", e => {
-            // Visual feedback handled via CSS
-        }, { passive: true });
-        cell.addEventListener("touchend", e => {
-            cell.classList.remove("dragging");
-            const endX = e.changedTouches[0].clientX;
-            const diff = endX - touchStartX;
-            const cellWidth = cell.offsetWidth;
-            if (Math.abs(diff) > cellWidth * 0.4 && touchStartIdx !== null) {
-                const steps = Math.round(diff / cellWidth);
-                const target = Math.max(0, Math.min(state.compareList.length - 1, touchStartIdx + steps));
-                if (target !== touchStartIdx) {
-                    reorderCompare(touchStartIdx, target);
-                }
-            }
-            touchStartIdx = null;
-        }, { passive: true });
-    });
-}
-
-function reorderCompare(fromIdx, toIdx) {
+// ========== Compare Move ==========
+function moveCompare(fromIdx, toIdx) {
     const item = state.compareList.splice(fromIdx, 1)[0];
     state.compareList.splice(toIdx, 0, item);
     saveState();
