@@ -178,10 +178,12 @@ body {
     display: flex;
     gap: 6px;
     margin-bottom: 6px;
+    flex-wrap: wrap;
 }
 
 .filter-row select {
-    flex: 1;
+    flex: 1 1 0;
+    min-width: 0;
     padding: 6px 10px;
     background: var(--surface);
     border: 1px solid var(--border);
