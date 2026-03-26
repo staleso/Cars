@@ -23,6 +23,11 @@
     --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
+html, body {
+    height: auto;
+    overflow-y: auto;
+}
+
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
     background: var(--bg);
