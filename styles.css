@@ -23,9 +23,9 @@
     --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
-html, body {
-    height: auto;
-    overflow-y: auto;
+html {
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 
 body {
@@ -34,7 +34,6 @@ body {
     color: var(--text);
     min-height: 100vh;
     min-height: 100dvh;
-    overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
 }
 
