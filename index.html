@@ -29,6 +29,83 @@
         gtag('js', new Date());
         gtag('config', 'G-3TDS5SGX53');
     </script>
+    <!-- Firebase -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getFirestore, doc, getDoc, setDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAxAbS7ohSJqcKHsRmsygGPfX36D2Upkqk",
+            authDomain: "elbilvalg.firebaseapp.com",
+            projectId: "elbilvalg",
+            storageBucket: "elbilvalg.firebasestorage.app",
+            messagingSenderId: "750901005322",
+            appId: "1:750901005322:web:1ed67fab732ff2402723f3",
+            measurementId: "G-T0R0LD2FPC"
+        };
+
+        const fbApp = initializeApp(firebaseConfig);
+        const db = getFirestore(fbApp);
+
+        // Get user IP for one-vote-per-IP
+        let userIP = localStorage.getItem("userIP") || "";
+        if (!userIP) {
+            try {
+                const res = await fetch("https://api.ipify.org?format=json");
+                const data = await res.json();
+                userIP = data.ip;
+                localStorage.setItem("userIP", userIP);
+            } catch(e) {
+                userIP = "unknown-" + Math.random().toString(36).slice(2);
+                localStorage.setItem("userIP", userIP);
+            }
+        }
+        // Simple hash for privacy
+        async function hashIP(ip) {
+            const msgBuffer = new TextEncoder().encode(ip);
+            const hashBuffer = await crypto.subtle.digest("SHA-256", msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+        }
+        const ipHash = await hashIP(userIP);
+
+        // Load all ratings from Firestore
+        async function loadRatings() {
+            try {
+                const snapshot = await getDocs(collection(db, "ratings"));
+                const allRatings = {};
+                snapshot.forEach(d => {
+                    allRatings[d.id] = d.data();
+                });
+                window._fbRatings = allRatings;
+                window._fbReady = true;
+                if (typeof updateUI === "function") updateUI();
+            } catch(e) {
+                console.error("Failed to load ratings:", e);
+                window._fbRatings = {};
+                window._fbReady = true;
+            }
+        }
+
+        // Save rating to Firestore
+        window._fbSaveRating = async function(carId, rating) {
+            const docRef = doc(db, "ratings", String(carId));
+            try {
+                const snap = await getDoc(docRef);
+                let votes = snap.exists() ? snap.data().votes || {} : {};
+                votes[ipHash] = rating;
+                await setDoc(docRef, { votes });
+                // Update local cache
+                if (!window._fbRatings) window._fbRatings = {};
+                window._fbRatings[String(carId)] = { votes };
+            } catch(e) {
+                console.error("Failed to save rating:", e);
+            }
+        };
+
+        window._fbIPHash = ipHash;
+        await loadRatings();
+    </script>
 </head>
 <body>
     <div id="app">
