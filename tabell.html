@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0a0a0a">
+    <title>Elbil Norge - Tabell</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #0a0a0a;
+            --surface: #1c1c1e;
+            --surface2: #2c2c2e;
+            --text: #ffffff;
+            --text2: #8e8e93;
+            --accent: #0a84ff;
+            --border: rgba(255,255,255,0.08);
+        }
+
+        html { overflow-x: auto; overflow-y: scroll; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            padding: 16px;
+        }
+
+        .header {
+            max-width: 1400px;
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .header h1 {
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .header-links {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .header-links a {
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .header-links a:hover { text-decoration: underline; }
+
+        .search-row {
+            max-width: 1400px;
+            margin: 0 auto 12px;
+        }
+
+        .search-row input {
+            width: 100%;
+            max-width: 400px;
+            padding: 8px 12px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+        }
+
+        .search-row input:focus { border-color: var(--accent); }
+        .search-row input::placeholder { color: var(--text2); }
+
+        .table-wrapper {
+            max-width: 1400px;
+            margin: 0 auto;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        thead { position: sticky; top: 0; z-index: 2; }
+
+        th {
+            background: var(--surface2);
+            padding: 10px 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text2);
+            cursor: pointer;
+            user-select: none;
+            border-bottom: 2px solid var(--border);
+            position: relative;
+        }
+
+        th:hover { color: var(--accent); }
+
+        th .sort-arrow {
+            margin-left: 4px;
+            font-size: 10px;
+            opacity: 0.4;
+        }
+
+        th.sorted .sort-arrow { opacity: 1; color: var(--accent); }
+
+        td {
+            padding: 8px 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tr:hover td { background: var(--surface); }
+
+        tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+        tr:nth-child(even):hover td { background: var(--surface); }
+
+        .col-num { text-align: right; }
+        .col-price { text-align: right; font-weight: 600; }
+        .col-make { font-weight: 600; }
+
+        .count-row {
+            max-width: 1400px;
+            margin: 8px auto 0;
+            font-size: 12px;
+            color: var(--text2);
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 8px; }
+            table { font-size: 12px; }
+            th, td { padding: 6px 8px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Elbil Norge - Tabell</h1>
+        <div class="header-links">
+            <a href="index.html">Tilbake til appen</a>
+        </div>
+    </div>
+    <div class="search-row">
+        <input type="text" id="search" placeholder="Søk etter merke, modell..." autocomplete="off">
+    </div>
+    <div class="table-wrapper">
+        <table id="car-table">
+            <thead>
+                <tr id="table-head"></tr>
+            </thead>
+            <tbody id="table-body"></tbody>
+        </table>
+    </div>
+    <div class="count-row" id="count-row"></div>
+
+    <script src="app.js?v=3"></script>
+    <script>
+    (function() {
+        const columns = [
+            { key: "make", label: "Merke", cls: "col-make" },
+            { key: "model", label: "Modell" },
+            { key: "year", label: "År", cls: "col-num" },
+            { key: "price", label: "Pris (NOK)", cls: "col-price", format: v => v ? v.toLocaleString("nb-NO") : "—" },
+            { key: "type", label: "Type" },
+            { key: "segment", label: "Segment" },
+            { key: "hp", label: "HK", cls: "col-num" },
+            { key: "kwh", label: "kWh", cls: "col-num" },
+            { key: "range", label: "Rekkevidde", cls: "col-num", format: v => v ? v + " km" : "—" },
+            { key: "zeroToHundred", label: "0-100", cls: "col-num", format: v => v ? v + "s" : "—" },
+            { key: "drivetrain", label: "Drivlinje" },
+            { key: "seats", label: "Seter", cls: "col-num" },
+            { key: "trunk", label: "Bagasje", cls: "col-num", format: v => v ? v + " L" : "—" },
+            { key: "length", label: "Lengde", cls: "col-num", format: v => v ? v + " mm" : "—" },
+            { key: "width", label: "Bredde", cls: "col-num", format: v => v ? v + " mm" : "—" },
+            { key: "height", label: "Høyde", cls: "col-num", format: v => v ? v + " mm" : "—" },
+            { key: "weight", label: "Vekt", cls: "col-num", format: v => v ? v.toLocaleString("nb-NO") + " kg" : "—" },
+        ];
+
+        let sortKey = "price";
+        let sortAsc = true;
+        let searchTerm = "";
+
+        function buildHead() {
+            const tr = document.getElementById("table-head");
+            tr.innerHTML = columns.map(col => {
+                const isSorted = col.key === sortKey;
+                const arrow = isSorted ? (sortAsc ? "▲" : "▼") : "▲";
+                return `<th class="${isSorted ? 'sorted' : ''}" data-key="${col.key}">
+                    ${col.label}<span class="sort-arrow">${arrow}</span>
+                </th>`;
+            }).join("");
+
+            tr.querySelectorAll("th").forEach(th => {
+                th.addEventListener("click", () => {
+                    const key = th.dataset.key;
+                    if (sortKey === key) {
+                        sortAsc = !sortAsc;
+                    } else {
+                        sortKey = key;
+                        sortAsc = true;
+                    }
+                    buildHead();
+                    renderRows();
+                });
+            });
+        }
+
+        function getFilteredSorted() {
+            let cars = [...CARS];
+            if (searchTerm) {
+                const q = searchTerm.toLowerCase();
+                cars = cars.filter(c =>
+                    (c.make + " " + c.model + " " + c.segment + " " + c.type + " " + c.drivetrain)
+                        .toLowerCase().includes(q)
+                );
+            }
+            cars.sort((a, b) => {
+                let va = a[sortKey], vb = b[sortKey];
+                if (va == null) va = "";
+                if (vb == null) vb = "";
+                if (typeof va === "string") {
+                    return sortAsc ? va.localeCompare(vb, "nb") : vb.localeCompare(va, "nb");
+                }
+                return sortAsc ? va - vb : vb - va;
+            });
+            return cars;
+        }
+
+        function renderRows() {
+            const cars = getFilteredSorted();
+            const tbody = document.getElementById("table-body");
+            tbody.innerHTML = cars.map(car => {
+                return "<tr>" + columns.map(col => {
+                    const val = car[col.key];
+                    const display = col.format ? col.format(val) : (val != null ? val : "—");
+                    return `<td class="${col.cls || ''}">${display}</td>`;
+                }).join("") + "</tr>";
+            }).join("");
+            document.getElementById("count-row").textContent = cars.length + " biler";
+        }
+
+        document.getElementById("search").addEventListener("input", e => {
+            searchTerm = e.target.value;
+            renderRows();
+        });
+
+        buildHead();
+        renderRows();
+    })();
+    </script>
+</body>
+</html>
