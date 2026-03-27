@@ -485,6 +485,21 @@ const CARS = [
     }
 ];
 
+// ========== Firebase ==========
+const firebaseConfig = {
+    apiKey: "AIzaSyAxAbS7ohSJqcKHsRmsygGPfX36D2Upkqk",
+    authDomain: "elbilvalg.firebaseapp.com",
+    projectId: "elbilvalg",
+    storageBucket: "elbilvalg.firebasestorage.app",
+    messagingSenderId: "750901005322",
+    appId: "1:750901005322:web:1ed67fab732ff2402723f3"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+// activeCars holds the car list – starts with local data, replaced by Firestore on load
+let activeCars = CARS;
+
 // ========== Brand Colors ==========
 const BRAND_COLORS = {
     "BMW":        { primary: "#0066B1", gradient: "linear-gradient(135deg, #0066B1, #003366)" },
@@ -690,7 +705,7 @@ function formatPrice(price) {
 }
 
 function getCarById(id) {
-    return CARS.find(c => c.id === id);
+    return activeCars.find(c => c.id === id);
 }
 
 function isInCompare(id) {
@@ -794,7 +809,7 @@ function renderBrowse() {
     const typeFilter = document.getElementById("filter-type").value;
     const sort = document.getElementById("filter-sort").value;
 
-    let cars = CARS.filter(car => {
+    let cars = activeCars.filter(car => {
         const matchSearch = `${car.make} ${car.model} ${car.year} ${car.segment}`.toLowerCase().includes(search);
         const matchBrand = brandFilter === "all" || car.make === brandFilter;
         const matchType = typeFilter === "all" || car.type === typeFilter;
@@ -1055,7 +1070,7 @@ function updateUI() {
 }
 
 // ========== Init ==========
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
     // Tab switching
     document.querySelectorAll(".tab").forEach(tab => {
         tab.addEventListener("click", () => switchTab(tab.dataset.tab));
@@ -1083,6 +1098,16 @@ document.addEventListener("DOMContentLoaded", () => {
         const diff = e.changedTouches[0].clientY - touchStartY;
         if (diff > 100 && modalContent.scrollTop <= 0) closeModal();
     }, { passive: true });
+
+    // Load cars from Firestore (falls back to local data on error)
+    try {
+        const snapshot = await db.collection('cars').get();
+        if (!snapshot.empty) {
+            activeCars = snapshot.docs.map(doc => doc.data());
+        }
+    } catch (e) {
+        console.warn('Bruker lokale bildata (Firestore ikke tilgjengelig):', e);
+    }
 
     updateUI();
 });
