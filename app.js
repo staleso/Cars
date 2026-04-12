@@ -1525,8 +1525,14 @@ function renderCompareBar() {
     const cars = state.compareList.map(getCarById).filter(Boolean);
     itemsEl.innerHTML = cars.map(car => `
         <div class="compare-bar-item" title="${car.make} ${car.model}">
-            <img src="${carImageUrl(car, 23)}" alt="${car.make} ${car.model}" loading="lazy">
-            <button class="compare-bar-item-remove" onclick="toggleCompare(${car.id}, event)" aria-label="Fjern">✕</button>
+            <div class="compare-bar-thumb">
+                <img src="${carImageUrl(car, 23)}" alt="${car.make} ${car.model}" loading="lazy">
+                <button class="compare-bar-item-remove" onclick="toggleCompare(${car.id}, event)" aria-label="Fjern">✕</button>
+            </div>
+            <div class="compare-bar-name">
+                <span class="compare-bar-make">${car.make}</span>
+                <span class="compare-bar-model">${car.model}</span>
+            </div>
         </div>
     `).join("");
 }
