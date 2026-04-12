@@ -21,7 +21,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=6">
+    <link rel="stylesheet" href="styles.css?v=7">
     <meta name="google-adsense-account" content="ca-pub-4678480487049419">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4678480487049419" crossorigin="anonymous"></script>
     <!-- Google Analytics -->
@@ -233,6 +233,17 @@
         </footer>
     </div>
 
+    <!-- Floating compare bar -->
+    <div id="compare-bar" class="compare-bar" style="display:none">
+        <div class="compare-bar-inner">
+            <div class="compare-bar-items" id="compare-bar-items"></div>
+            <button class="compare-bar-btn" onclick="switchTab('compare')">
+                Sammenlign <span id="compare-bar-count">0</span>
+            </button>
+            <button class="compare-bar-clear" onclick="clearCompare()" aria-label="Tøm">✕</button>
+        </div>
+    </div>
+
     <!-- Cookie consent banner -->
     <div id="cookie-consent" class="cookie-banner" style="display:none">
         <div class="cookie-text">
@@ -281,7 +292,7 @@
         })();
     </script>
 
-    <script src="app.js?v=6"></script>
+    <script src="app.js?v=7"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
         import { getFirestore, doc, getDoc, setDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";

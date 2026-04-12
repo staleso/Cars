@@ -1507,11 +1507,42 @@ function switchTab(tab) {
     updateUI();
 }
 
+// ========== Floating Compare Bar ==========
+function renderCompareBar() {
+    const bar = document.getElementById("compare-bar");
+    if (!bar) return;
+    const itemsEl = document.getElementById("compare-bar-items");
+    const countEl = document.getElementById("compare-bar-count");
+    const count = state.compareList.length;
+
+    if (count === 0) {
+        bar.style.display = "none";
+        return;
+    }
+    bar.style.display = "block";
+    countEl.textContent = count;
+
+    const cars = state.compareList.map(getCarById).filter(Boolean);
+    itemsEl.innerHTML = cars.map(car => `
+        <div class="compare-bar-item" title="${car.make} ${car.model}">
+            <img src="${carImageUrl(car, 23)}" alt="${car.make} ${car.model}" loading="lazy">
+            <button class="compare-bar-item-remove" onclick="toggleCompare(${car.id}, event)" aria-label="Fjern">✕</button>
+        </div>
+    `).join("");
+}
+
+function clearCompare() {
+    state.compareList = [];
+    saveState();
+    updateUI();
+}
+
 // ========== Global Update ==========
 function updateUI() {
     renderBrowse();
     renderCompare();
     renderFavorites();
+    renderCompareBar();
 }
 
 // ========== Init ==========
