@@ -2251,8 +2251,8 @@ body.tab-favorites .recently-viewed-strip {
 .slider-filters {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 18px 20px;
-    padding: 10px 14px 6px;
+    gap: 16px 22px;
+    padding: 12px 14px 10px;
 }
 
 .slider-filter {
@@ -2263,7 +2263,7 @@ body.tab-favorites .recently-viewed-strip {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     gap: 8px;
     min-height: 18px;
 }
@@ -2282,7 +2282,7 @@ body.tab-favorites .recently-viewed-strip {
     font-weight: 500;
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
-    transition: color 0.15s ease;
+    transition: color 0.2s ease;
 }
 
 .slider-filter.is-active .slider-value {
@@ -2293,124 +2293,198 @@ body.tab-favorites .recently-viewed-strip {
 .dual-slider,
 .single-slider {
     position: relative;
-    height: 20px;
+    height: 28px;
     display: flex;
     align-items: center;
+    touch-action: none;
 }
 
 .slider-track {
     position: absolute;
     left: 0;
     right: 0;
-    height: 3px;
+    height: 4px;
     background: var(--bg3);
     border-radius: 999px;
     overflow: hidden;
 }
 
-.dual-slider .slider-fill {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    background: var(--accent, #2563eb);
-    border-radius: 999px;
-    transition: background 0.2s ease;
-}
-
+.dual-slider .slider-fill,
 .single-slider .slider-fill {
     position: absolute;
     top: 0;
     bottom: 0;
-    left: 0;
-    width: 0%;
-    background: var(--accent, #2563eb);
+    background: linear-gradient(90deg, var(--accent, #2563eb), #4f86f7);
     border-radius: 999px;
-    transition: background 0.2s ease;
+    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0);
+    transition: box-shadow 0.3s ease;
 }
 
+.single-slider .slider-fill {
+    left: 0;
+    width: 0%;
+}
+
+.dual-slider.is-dragging .slider-fill,
+.single-slider.is-dragging .slider-fill {
+    box-shadow: 0 0 12px rgba(37, 99, 235, 0.35);
+}
+
+/* Range input — transparent shell, only thumb is visible */
 .dual-slider input[type="range"],
 .single-slider input[type="range"] {
     -webkit-appearance: none;
     appearance: none;
     position: absolute;
-    left: -2px;
-    right: -2px;
-    width: calc(100% + 4px);
-    height: 20px;
+    left: -4px;
+    right: -4px;
+    width: calc(100% + 8px);
+    height: 28px;
     background: transparent;
     pointer-events: none;
     margin: 0;
     padding: 0;
+    z-index: 2;
 }
 
+/* Thumb: slightly larger, soft shadow, smooth transitions */
 .dual-slider input[type="range"]::-webkit-slider-thumb,
 .single-slider input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
     pointer-events: auto;
-    width: 14px;
-    height: 14px;
+    width: 18px;
+    height: 18px;
     border-radius: 50%;
-    background: var(--accent, #2563eb);
-    border: 2px solid var(--bg1, #fff);
+    background: #fff;
+    border: none;
     cursor: grab;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 0 0 0 rgba(37, 99, 235, 0);
-    transition: box-shadow 0.15s ease, transform 0.1s ease;
+    box-shadow:
+        0 0 0 1.5px var(--accent, #2563eb) inset,
+        0 1px 2px rgba(15, 23, 42, 0.08),
+        0 4px 12px rgba(15, 23, 42, 0.12),
+        0 0 0 0 rgba(37, 99, 235, 0);
+    transition: box-shadow 0.2s cubic-bezier(0.2, 0.8, 0.2, 1),
+                transform 0.15s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .dual-slider input[type="range"]::-webkit-slider-thumb:hover,
 .single-slider input[type="range"]::-webkit-slider-thumb:hover {
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 0 0 6px rgba(37, 99, 235, 0.12);
+    box-shadow:
+        0 0 0 1.5px var(--accent, #2563eb) inset,
+        0 1px 2px rgba(15, 23, 42, 0.08),
+        0 6px 16px rgba(15, 23, 42, 0.15),
+        0 0 0 8px rgba(37, 99, 235, 0.10);
 }
 
 .dual-slider input[type="range"]::-webkit-slider-thumb:active,
 .single-slider input[type="range"]::-webkit-slider-thumb:active {
     cursor: grabbing;
-    transform: scale(1.1);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18), 0 0 0 8px rgba(37, 99, 235, 0.18);
+    transform: scale(1.15);
+    box-shadow:
+        0 0 0 1.5px var(--accent, #2563eb) inset,
+        0 2px 4px rgba(15, 23, 42, 0.10),
+        0 8px 20px rgba(15, 23, 42, 0.20),
+        0 0 0 12px rgba(37, 99, 235, 0.15);
 }
 
 .dual-slider input[type="range"]::-moz-range-thumb,
 .single-slider input[type="range"]::-moz-range-thumb {
     pointer-events: auto;
-    width: 14px;
-    height: 14px;
+    width: 18px;
+    height: 18px;
     border-radius: 50%;
-    background: var(--accent, #2563eb);
-    border: 2px solid var(--bg1, #fff);
+    background: #fff;
+    border: 1.5px solid var(--accent, #2563eb);
     cursor: grab;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
-    transition: box-shadow 0.15s ease, transform 0.1s ease;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08), 0 4px 12px rgba(15, 23, 42, 0.12);
+    transition: box-shadow 0.2s ease, transform 0.15s ease;
 }
 
 .dual-slider input[type="range"]::-moz-range-thumb:hover,
 .single-slider input[type="range"]::-moz-range-thumb:hover {
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 0 0 6px rgba(37, 99, 235, 0.12);
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08), 0 6px 16px rgba(15, 23, 42, 0.15), 0 0 0 8px rgba(37, 99, 235, 0.10);
 }
 
 .dual-slider input[type="range"]::-moz-range-thumb:active,
 .single-slider input[type="range"]::-moz-range-thumb:active {
     cursor: grabbing;
-    transform: scale(1.1);
+    transform: scale(1.15);
 }
 
 .dual-slider input[type="range"]::-webkit-slider-runnable-track,
 .single-slider input[type="range"]::-webkit-slider-runnable-track {
     background: transparent;
-    height: 20px;
+    height: 28px;
     border: none;
 }
 
 .dual-slider input[type="range"]::-moz-range-track,
 .single-slider input[type="range"]::-moz-range-track {
     background: transparent;
-    height: 20px;
+    height: 28px;
     border: none;
 }
 
 .dual-slider input[type="range"]:focus,
 .single-slider input[type="range"]:focus {
     outline: none;
+}
+
+/* Dark mode: thumb gets accent-filled interior so it reads on dark bg */
+:root[data-theme="dark"] .dual-slider input[type="range"]::-webkit-slider-thumb,
+:root[data-theme="dark"] .single-slider input[type="range"]::-webkit-slider-thumb {
+    background: #1a1a24;
+    box-shadow:
+        0 0 0 1.5px var(--accent, #2563eb) inset,
+        0 0 0 4px rgba(37, 99, 235, 0.25) inset,
+        0 2px 6px rgba(0, 0, 0, 0.5),
+        0 0 0 0 rgba(37, 99, 235, 0);
+}
+
+:root[data-theme="dark"] .dual-slider input[type="range"]::-moz-range-thumb,
+:root[data-theme="dark"] .single-slider input[type="range"]::-moz-range-thumb {
+    background: var(--accent, #2563eb);
+    border-color: #1a1a24;
+}
+
+/* Value bubble above thumb */
+.slider-bubble {
+    position: absolute;
+    bottom: calc(100% + 6px);
+    transform: translateX(-50%) translateY(4px);
+    padding: 4px 9px;
+    background: var(--text1);
+    color: var(--bg1);
+    font-size: 11px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    border-radius: 6px;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.18s ease, transform 0.18s cubic-bezier(0.2, 0.8, 0.2, 1);
+    z-index: 4;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.18);
+    letter-spacing: 0.01em;
+}
+
+.slider-bubble::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 4px solid transparent;
+    border-top-color: var(--text1);
+}
+
+.dual-slider.is-dragging .slider-bubble.is-active,
+.single-slider.is-dragging .slider-bubble.is-active,
+.dual-slider:hover .slider-bubble,
+.single-slider:hover .slider-bubble {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
 }
 
 /* Stack the two range inputs so both thumbs are reachable */
@@ -2420,8 +2494,8 @@ body.tab-favorites .recently-viewed-strip {
 @media (max-width: 520px) {
     .slider-filters {
         grid-template-columns: 1fr;
-        gap: 12px;
-        padding: 8px 12px 4px;
+        gap: 14px;
+        padding: 10px 12px 8px;
     }
 }
 

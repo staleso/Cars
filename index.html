@@ -32,7 +32,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=18">
+    <link rel="stylesheet" href="styles.css?v=19">
     <meta name="google-adsense-account" content="ca-pub-4678480487049419">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4678480487049419" crossorigin="anonymous"></script>
     <!-- Google Analytics -->
@@ -131,6 +131,8 @@
                         </div>
                         <div class="dual-slider">
                             <div class="slider-track"><div class="slider-fill" id="price-fill"></div></div>
+                            <div class="slider-bubble" id="price-min-bubble"></div>
+                            <div class="slider-bubble" id="price-max-bubble"></div>
                             <input type="range" id="price-min" min="0" max="1500000" step="25000" value="0" aria-label="Minste pris">
                             <input type="range" id="price-max" min="0" max="1500000" step="25000" value="1500000" aria-label="Største pris">
                         </div>
@@ -142,6 +144,7 @@
                         </div>
                         <div class="single-slider">
                             <div class="slider-track"><div class="slider-fill" id="range-fill"></div></div>
+                            <div class="slider-bubble" id="range-min-bubble"></div>
                             <input type="range" id="range-min" min="0" max="700" step="25" value="0" aria-label="Minste rekkevidde">
                         </div>
                     </div>
@@ -305,7 +308,7 @@
         })();
     </script>
 
-    <script src="app.js?v=18"></script>
+    <script src="app.js?v=19"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
         import { getFirestore, doc, getDoc, setDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
