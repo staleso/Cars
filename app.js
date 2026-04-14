@@ -1307,12 +1307,16 @@ function updateSliderUI() {
         else priceVal.textContent = formatPriceShort(pf.min) + " – " + formatPriceShort(pf.max);
     }
     if (priceWrap) priceWrap.classList.toggle("is-active", pf.active);
+    const pLo = ((pf.min - PRICE_MIN) / (PRICE_MAX - PRICE_MIN)) * 100;
+    const pHi = ((pf.max - PRICE_MIN) / (PRICE_MAX - PRICE_MIN)) * 100;
     if (priceFill) {
-        const l = ((pf.min - PRICE_MIN) / (PRICE_MAX - PRICE_MIN)) * 100;
-        const r = ((pf.max - PRICE_MIN) / (PRICE_MAX - PRICE_MIN)) * 100;
-        priceFill.style.left = l + "%";
-        priceFill.style.right = (100 - r) + "%";
+        priceFill.style.left = pLo + "%";
+        priceFill.style.right = (100 - pHi) + "%";
     }
+    const pMinBub = document.getElementById("price-min-bubble");
+    const pMaxBub = document.getElementById("price-max-bubble");
+    if (pMinBub) { pMinBub.style.left = pLo + "%"; pMinBub.textContent = formatPriceShort(pf.min); }
+    if (pMaxBub) { pMaxBub.style.left = pHi + "%"; pMaxBub.textContent = formatPriceShort(pf.max); }
 
     const rf = getRangeFilter();
     const rangeVal = document.getElementById("range-value");
@@ -1320,10 +1324,10 @@ function updateSliderUI() {
     const rangeWrap = rangeVal && rangeVal.closest(".slider-filter");
     if (rangeVal) rangeVal.textContent = rf.active ? ("Min. " + rf.min + " km") : "Alle";
     if (rangeWrap) rangeWrap.classList.toggle("is-active", rf.active);
-    if (rangeFill) {
-        const w = ((rf.min - RANGE_MIN) / (RANGE_MAX - RANGE_MIN)) * 100;
-        rangeFill.style.width = w + "%";
-    }
+    const rPct = ((rf.min - RANGE_MIN) / (RANGE_MAX - RANGE_MIN)) * 100;
+    if (rangeFill) rangeFill.style.width = rPct + "%";
+    const rBub = document.getElementById("range-min-bubble");
+    if (rBub) { rBub.style.left = rPct + "%"; rBub.textContent = rf.min + " km"; }
 }
 
 // ========== Browse Tab ==========
@@ -1782,8 +1786,32 @@ document.addEventListener("DOMContentLoaded", () => {
     const priceMin = document.getElementById("price-min");
     const priceMax = document.getElementById("price-max");
     const rangeMin = document.getElementById("range-min");
+
+    // Helpers for bubble/thumb active states
+    function setDragging(inputEl, bubbleId, dragging) {
+        if (!inputEl) return;
+        const wrap = inputEl.closest(".dual-slider, .single-slider");
+        const bubble = bubbleId ? document.getElementById(bubbleId) : null;
+        if (dragging) {
+            if (wrap) wrap.classList.add("is-dragging");
+            if (bubble) bubble.classList.add("is-active");
+        } else {
+            if (wrap) wrap.classList.remove("is-dragging");
+            if (bubble) bubble.classList.remove("is-active");
+        }
+    }
+    function wireSlider(inputEl, bubbleId, onInput) {
+        if (!inputEl) return;
+        inputEl.addEventListener("input", onInput);
+        inputEl.addEventListener("pointerdown", () => setDragging(inputEl, bubbleId, true));
+        inputEl.addEventListener("pointerup", () => setDragging(inputEl, bubbleId, false));
+        inputEl.addEventListener("pointercancel", () => setDragging(inputEl, bubbleId, false));
+        inputEl.addEventListener("focus", () => setDragging(inputEl, bubbleId, true));
+        inputEl.addEventListener("blur", () => setDragging(inputEl, bubbleId, false));
+    }
+
     if (priceMin && priceMax) {
-        // Prevent handles from crossing
+        // Prevent handles from crossing, swap z-index based on drag target
         const clampPrice = () => {
             const lo = parseInt(priceMin.value, 10);
             const hi = parseInt(priceMax.value, 10);
@@ -1793,13 +1821,16 @@ document.addEventListener("DOMContentLoaded", () => {
             }
             updateSliderUI();
         };
-        priceMin.addEventListener("input", clampPrice);
-        priceMax.addEventListener("input", clampPrice);
+        wireSlider(priceMin, "price-min-bubble", clampPrice);
+        wireSlider(priceMax, "price-max-bubble", clampPrice);
         priceMin.addEventListener("change", renderBrowse);
         priceMax.addEventListener("change", renderBrowse);
+        // Raise the thumb being interacted with above the other
+        priceMin.addEventListener("pointerdown", () => { priceMin.style.zIndex = 3; priceMax.style.zIndex = 1; });
+        priceMax.addEventListener("pointerdown", () => { priceMax.style.zIndex = 3; priceMin.style.zIndex = 1; });
     }
     if (rangeMin) {
-        rangeMin.addEventListener("input", updateSliderUI);
+        wireSlider(rangeMin, "range-min-bubble", updateSliderUI);
         rangeMin.addEventListener("change", renderBrowse);
     }
     updateSliderUI();
