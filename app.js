@@ -1778,6 +1778,34 @@ document.addEventListener("DOMContentLoaded", () => {
     // Position indicator on load
     requestAnimationFrame(() => switchTab(state.activeTab || "browse"));
 
+    // Collapse top nav (brand/tabs + extra filters) on scroll — keep search visible.
+    const stickyTop = document.querySelector(".sticky-top");
+    if (stickyTop) {
+        let ticking = false;
+        const onScroll = () => {
+            if (ticking) return;
+            ticking = true;
+            requestAnimationFrame(() => {
+                const y = window.scrollY || document.documentElement.scrollTop;
+                stickyTop.classList.toggle("is-scrolled", y > 24);
+                ticking = false;
+                // Keep tab indicator aligned after height change transitions
+                if (typeof switchTab === "function" && state.activeTab) {
+                    const indicator = document.querySelector(".tab-indicator");
+                    const activeTab = document.querySelector('.tab[data-tab="' + state.activeTab + '"]');
+                    if (indicator && activeTab) {
+                        const bar = activeTab.parentElement;
+                        const barRect = bar.getBoundingClientRect();
+                        const tabRect = activeTab.getBoundingClientRect();
+                        indicator.style.left = (tabRect.left - barRect.left) + "px";
+                        indicator.style.width = tabRect.width + "px";
+                    }
+                }
+            });
+        };
+        window.addEventListener("scroll", onScroll, { passive: true });
+    }
+
     // Search & filter (search is debounced so typing doesn't rebuild DOM on every keystroke)
     const debouncedRender = (function() {
         let t = null;
