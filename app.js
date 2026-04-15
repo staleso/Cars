@@ -1277,11 +1277,12 @@ function renderCarCard(car) {
                     <span class="car-tag">${efficiency} kWh/100km</span>
                 </div>
                 <div class="car-card-actions">
-                    ${renderStars(car.id, 12)}
-                    <button class="btn-icon ${isInCompare(car.id) ? 'active-compare' : ''}"
+                    ${renderStars(car.id, 16)}
+                    <button class="btn-compare ${isInCompare(car.id) ? 'active-compare' : ''}"
                             onclick="toggleCompare(${car.id}, event)"
-                            aria-label="Sammenlign">
-                        ${isInCompare(car.id) ? ICONS.check : ICONS.plus}
+                            aria-label="${isInCompare(car.id) ? 'Fjern fra sammenligning' : 'Legg til sammenligning'}">
+                        <span class="btn-compare-icon">${isInCompare(car.id) ? ICONS.check : ICONS.plus}</span>
+                        <span class="btn-compare-label">${isInCompare(car.id) ? 'Lagt til' : 'Sammenlign'}</span>
                     </button>
                 </div>
             </div>
