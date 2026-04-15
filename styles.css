@@ -318,12 +318,12 @@ body.tab-favorites .sticky-filters {
 }
 
 .car-card-image {
-    width: 180px;
+    width: 150px;
     flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 12px;
+    padding: 10px;
     background: var(--surface2);
     position: relative;
     overflow: hidden;
@@ -363,22 +363,22 @@ body.tab-favorites .sticky-filters {
     }
     .car-card-image {
         width: 100%;
-        height: 140px;
-        padding: 16px;
+        height: 120px;
+        padding: 12px;
     }
     .car-card-image img {
-        max-height: 120px;
+        max-height: 100px;
         width: auto;
     }
 }
 
 .car-card-body {
-    padding: 20px 24px;
+    padding: 12px 16px 10px;
     flex: 1;
     min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 8px;
 }
 
 .car-card-top {
@@ -393,22 +393,22 @@ body.tab-favorites .sticky-filters {
 }
 
 .car-card-title {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 500;
-    line-height: 1.3;
+    line-height: 1.25;
     letter-spacing: -0.02em;
     color: var(--text);
 }
 
 .car-card-subtitle {
-    font-size: 13px;
+    font-size: 12px;
     color: var(--text2);
-    margin-top: 4px;
+    margin-top: 2px;
     font-weight: 300;
 }
 
 .car-card-price {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
     color: var(--text);
     letter-spacing: -0.02em;
@@ -429,8 +429,8 @@ body.tab-favorites .sticky-filters {
     flex-wrap: wrap;
     align-items: baseline;
     gap: 3px;
-    padding: 0 14px;
-    min-width: 60px;
+    padding: 0 10px;
+    min-width: 54px;
 }
 
 .spec-sub {
@@ -442,7 +442,7 @@ body.tab-favorites .sticky-filters {
 }
 
 .spec-value {
-    font-size: 22px;
+    font-size: 18px;
     font-weight: 300;
     color: var(--text);
     letter-spacing: -0.03em;
@@ -450,7 +450,7 @@ body.tab-favorites .sticky-filters {
 }
 
 .spec-unit {
-    font-size: 12px;
+    font-size: 11px;
     color: var(--text2);
     font-weight: 400;
 }
@@ -459,12 +459,12 @@ body.tab-favorites .sticky-filters {
     font-size: 10px;
     color: var(--text3);
     font-weight: 400;
-    margin-top: 2px;
+    margin-top: 1px;
 }
 
 .spec-divider {
     width: 1px;
-    height: 20px;
+    height: 18px;
     background: var(--border);
     align-self: center;
 }
@@ -475,7 +475,7 @@ body.tab-favorites .sticky-filters {
     align-items: center;
     justify-content: space-between;
     gap: 8px;
-    padding-top: 12px;
+    padding-top: 8px;
     border-top: 1px solid var(--border);
 }
 
@@ -486,10 +486,10 @@ body.tab-favorites .sticky-filters {
 }
 
 .car-tag {
-    font-size: 11px;
+    font-size: 10px;
     color: var(--text2);
     background: var(--surface2);
-    padding: 3px 10px;
+    padding: 2px 8px;
     border-radius: 20px;
     font-weight: 400;
 }
@@ -497,7 +497,7 @@ body.tab-favorites .sticky-filters {
 .car-card-actions {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 10px;
 }
 
 .car-actions {
@@ -532,6 +532,65 @@ body.tab-favorites .sticky-filters {
 .btn-icon.active-compare {
     background: rgba(37,99,235,0.1);
     color: var(--accent);
+}
+
+/* Compare button (chip-style, more visible than the old icon-only) */
+.btn-compare {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 30px;
+    padding: 0 12px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--text);
+    font-size: 12px;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.1s, box-shadow 0.15s;
+}
+
+.btn-compare:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+}
+
+.btn-compare:active {
+    transform: scale(0.96);
+}
+
+.btn-compare-icon {
+    display: inline-flex;
+    width: 14px;
+    height: 14px;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-compare-icon svg {
+    width: 14px;
+    height: 14px;
+}
+
+.btn-compare.active-compare {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+}
+
+.btn-compare.active-compare:hover {
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18);
+}
+
+@media (max-width: 480px) {
+    .btn-compare-label { display: none; }
+    .btn-compare { padding: 0 9px; }
 }
 
 /* ========== Empty State ========== */
@@ -1013,10 +1072,15 @@ body.tab-favorites .sticky-filters {
 
 .star-filled {
     color: #f59e0b;
+    text-shadow: 0 0 1px rgba(245, 158, 11, 0.4);
 }
 
 .star-empty {
-    color: var(--surface3);
+    color: #d1d5db;
+}
+
+:root[data-theme="dark"] .star-empty {
+    color: #4b5563;
 }
 
 .star-avg {
