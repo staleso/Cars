@@ -1292,7 +1292,6 @@ function renderCarCard(car) {
 
 // ========== Slider filters ==========
 const PRICE_MIN = 0, PRICE_MAX = 1500000, PRICE_STEP = 25000;
-const RANGE_MIN = 0, RANGE_MAX = 700, RANGE_STEP = 25;
 
 function formatPriceShort(v) {
     if (v >= 1000000) return (v / 1000000).toFixed(v % 1000000 === 0 ? 0 : 1).replace(".", ",") + " mill";
@@ -1308,13 +1307,6 @@ function getPriceFilter() {
     let hi = parseInt(maxEl.value, 10);
     if (lo > hi) { const t = lo; lo = hi; hi = t; }
     return { min: lo, max: hi, active: lo > PRICE_MIN || hi < PRICE_MAX };
-}
-
-function getRangeFilter() {
-    const el = document.getElementById("range-min");
-    if (!el) return { min: 0, active: false };
-    const v = parseInt(el.value, 10);
-    return { min: v, active: v > 0 };
 }
 
 function updateSliderUI() {
@@ -1337,17 +1329,6 @@ function updateSliderUI() {
     const pMaxBub = document.getElementById("price-max-bubble");
     if (pMinBub) { pMinBub.style.left = pLo + "%"; pMinBub.textContent = formatPriceShort(pf.min); }
     if (pMaxBub) { pMaxBub.style.left = pHi + "%"; pMaxBub.textContent = formatPriceShort(pf.max); }
-
-    const rf = getRangeFilter();
-    const rangeVal = document.getElementById("range-value");
-    const rangeFill = document.getElementById("range-fill");
-    const rangeWrap = rangeVal && rangeVal.closest(".slider-filter");
-    if (rangeVal) rangeVal.textContent = rf.active ? ("Min. " + rf.min + " km") : "Alle";
-    if (rangeWrap) rangeWrap.classList.toggle("is-active", rf.active);
-    const rPct = ((rf.min - RANGE_MIN) / (RANGE_MAX - RANGE_MIN)) * 100;
-    if (rangeFill) rangeFill.style.width = rPct + "%";
-    const rBub = document.getElementById("range-min-bubble");
-    if (rBub) { rBub.style.left = rPct + "%"; rBub.textContent = rf.min + " km"; }
 }
 
 // ========== Browse Tab ==========
@@ -1358,7 +1339,6 @@ function renderBrowse() {
     const typeFilter = document.getElementById("filter-type").value;
     const sort = document.getElementById("filter-sort").value;
     const pf = getPriceFilter();
-    const rf = getRangeFilter();
     updateSliderUI();
 
     let cars = CARS.filter(car => {
@@ -1366,8 +1346,7 @@ function renderBrowse() {
         const matchBrand = brandFilter === "all" || car.make === brandFilter;
         const matchType = typeFilter === "all" || car.type === typeFilter;
         const matchPrice = car.price >= pf.min && car.price <= pf.max;
-        const matchRange = car.range >= rf.min;
-        return matchSearch && matchBrand && matchType && matchPrice && matchRange;
+        return matchSearch && matchBrand && matchType && matchPrice;
     });
 
     switch (sort) {
@@ -1777,7 +1756,6 @@ function updateUI() {
     renderBrowse();
     renderCompare();
     renderCompareBar();
-    renderRecentlyViewed();
 }
 
 // ========== Init ==========
@@ -1805,7 +1783,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // Slider filters
     const priceMin = document.getElementById("price-min");
     const priceMax = document.getElementById("price-max");
-    const rangeMin = document.getElementById("range-min");
 
     // Helpers for bubble/thumb active states
     function setDragging(inputEl, bubbleId, dragging) {
@@ -1848,10 +1825,6 @@ document.addEventListener("DOMContentLoaded", () => {
         // Raise the thumb being interacted with above the other
         priceMin.addEventListener("pointerdown", () => { priceMin.style.zIndex = 3; priceMax.style.zIndex = 1; });
         priceMax.addEventListener("pointerdown", () => { priceMax.style.zIndex = 3; priceMin.style.zIndex = 1; });
-    }
-    if (rangeMin) {
-        wireSlider(rangeMin, "range-min-bubble", updateSliderUI);
-        rangeMin.addEventListener("change", renderBrowse);
     }
     updateSliderUI();
 

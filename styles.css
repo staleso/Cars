@@ -93,31 +93,33 @@ body.tab-favorites .sticky-filters {
     height: var(--safe-top);
 }
 
+.app-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px 2px;
+}
+
+.brand {
+    font-size: 19px;
+    font-weight: 400;
+    color: var(--text);
+    text-decoration: none;
+    letter-spacing: -0.03em;
+    white-space: nowrap;
+    line-height: 1.2;
+}
+
 /* ========== Tab Bar ========== */
 .tab-bar {
     display: flex;
-    gap: 2px;
+    gap: 4px;
     padding: 4px;
-    margin: 8px 12px 0;
+    margin: 6px 16px 0;
     background: var(--surface);
     border-radius: 10px;
     position: relative;
     border: 1px solid var(--border);
-    align-items: center;
-}
-
-.brand {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--text);
-    text-decoration: none;
-    padding: 0 10px 0 6px;
-    letter-spacing: -0.02em;
-    white-space: nowrap;
-    flex-shrink: 0;
-    border-right: 1px solid var(--border);
-    margin-right: 4px;
-    line-height: 28px;
 }
 
 .tab-link {
@@ -130,11 +132,11 @@ body.tab-favorites .sticky-filters {
 .tab {
     flex: 1 1 0;
     min-width: 0;
-    padding: 6px 4px;
+    padding: 7px 6px;
     border: none;
     background: transparent;
     color: var(--text2);
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 400;
     border-radius: 8px;
     cursor: pointer;
@@ -146,19 +148,6 @@ body.tab-favorites .sticky-filters {
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-}
-
-@media (max-width: 420px) {
-    .brand {
-        font-size: 0;
-        padding: 0 6px 0 4px;
-        margin-right: 2px;
-    }
-    .brand::before {
-        content: "EN";
-        font-size: 13px;
-        font-weight: 600;
-    }
 }
 
 .tab.active {
@@ -1823,14 +1812,12 @@ body:not(.tab-compare) #app {
 
 /* ===== Dark Mode Toggle ===== */
 .theme-toggle {
-    position: static;
     flex-shrink: 0;
-    width: 30px;
-    height: 30px;
-    margin-left: 4px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
     border: 1px solid var(--border);
-    background: transparent;
+    background: var(--surface);
     color: var(--text2);
     cursor: pointer;
     display: flex;
@@ -1847,8 +1834,8 @@ body:not(.tab-compare) #app {
 }
 
 .theme-toggle svg {
-    width: 14px;
-    height: 14px;
+    width: 15px;
+    height: 15px;
 }
 
 :root[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
