@@ -273,8 +273,47 @@
             color: var(--text2);
             line-height: 1.5;
             margin-top: 20px;
-            padding-top: 16px;
+            padding: 16px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+        }
+        .calc-disclaimer strong {
+            color: var(--text);
+        }
+        .calc-disclaimer li {
+            margin-bottom: 2px;
+        }
+
+        .calc-warning {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: var(--radius);
+            padding: 14px 16px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #78350f;
+        }
+        :root[data-theme="dark"] .calc-warning {
+            background: #422006;
+            border-color: #b45309;
+            color: #fcd34d;
+        }
+        .calc-warning strong {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .calc-results-disclaimer {
+            font-size: 11px;
+            color: var(--text3);
+            text-align: center;
+            margin-top: 12px;
+            padding-top: 10px;
             border-top: 1px solid var(--border);
+            line-height: 1.4;
         }
     </style>
 </head>
@@ -286,6 +325,11 @@
 
         <h1 class="calc-title">Elbil vs. bensin — hva koster det?</h1>
         <p class="calc-intro">Sammenlign totalkostnaden for elbil og bensinbil over tid. Velg en elbil for å fylle inn data automatisk, eller skriv inn dine egne tall. Alle felt kan endres.</p>
+
+        <div class="calc-warning">
+            <strong>Kun veiledende estimat — ikke finansiell rådgivning</strong>
+            Denne kalkulatoren gir et forenklet overslag basert på tallene du legger inn. Mange faktorer er ikke inkludert: lånerente, trafikkforsikringsavgift, parkeringsfordeler, batteridegradring og individuelle forsikringsvilkår. Avgiftsfordeler for elbil (mva-fritak, engangsavgift, bompenger) fastsettes politisk og kan endres. Kontakt forhandler eller finansrådgiver for konkrete vurderinger.
+        </div>
 
         <div class="calc-car-select">
             <label for="car-picker">Velg elbil (fyller ut automatisk)</label>
@@ -384,9 +428,26 @@
             <div class="calc-results-title">Totalkostnad over <span id="result-years">5</span> år</div>
             <div class="calc-results-grid" id="results-grid"></div>
             <div class="calc-verdict" id="calc-verdict"></div>
+            <p class="calc-results-disclaimer">Estimat — ikke fasitsvar. Mange kostnader er ikke inkludert. Se fullstendig forbehold under.</p>
         </div>
 
-        <p class="calc-disclaimer">Kalkulatoren gir et estimat basert på tallene du oppgir. Faktiske kostnader avhenger av mange faktorer som ikke er inkludert, blant annet rentenivå på billån, lokale bompenger, parkeringsfordeler og individuelle forsikringsvilkår. Verditap varierer betydelig mellom merker og modeller. Strøm- og bensinpriser svinger over tid. Bruk resultatet som et utgangspunkt, ikke et fasitsvar.</p>
+        <div class="calc-disclaimer">
+            <strong>Fullstendig forbehold</strong>
+            <p>Denne kalkulatoren er kun ment som et veiledende verktøy og utgjør ikke finansiell, juridisk eller annen profesjonell rådgivning. Elbilvalg.no tar ikke ansvar for beslutninger tatt på grunnlag av resultatene.</p>
+            <p style="margin-top:8px"><strong>Faktorer som ikke er inkludert:</strong></p>
+            <ul style="margin:6px 0 0 16px; padding:0;">
+                <li>Rente og gebyrer på billån/leasing</li>
+                <li>Trafikkforsikringsavgift (ulik for elbil og bensin)</li>
+                <li>Parkeringsfordeler for elbil (kommunalt fastsatt)</li>
+                <li>Fergerabatt og kollektivfelt (kan endres politisk)</li>
+                <li>Batteridegradring som øker forbruket over tid</li>
+                <li>Dekkslitasje (elbiler er tyngre og sliter dekk raskere)</li>
+                <li>Årsavgift og EU-kontroll</li>
+            </ul>
+            <p style="margin-top:8px"><strong>Viktig om avgifter:</strong> Mva-fritaket for elbil, engangsavgift, bompengesatser og andre fordeler fastsettes politisk og kan endres uten varsel. Tallene i kalkulatoren reflekterer forholdene på publiseringstidspunktet.</p>
+            <p style="margin-top:8px"><strong>Verditap</strong> varierer betydelig mellom merker, modeller og årganger. Standardverdiene (50 % elbil, 55 % bensin over 5 år) er grove gjennomsnitt og kan avvike vesentlig for din bil.</p>
+            <p style="margin-top:8px">Kontakt forhandler eller uavhengig finansrådgiver for konkrete vurderinger av bilhold.</p>
+        </div>
     </div>
 
     <footer class="site-footer">
