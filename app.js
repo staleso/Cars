@@ -1999,7 +1999,7 @@ function sendFeedback() {
     }
     const subject = encodeURIComponent(`Tilbakemelding - ${type}`);
     const body = encodeURIComponent(`Type: ${type}\n\n${text}\n\n---\nSendt fra Elbil-appen`);
-    window.open(`mailto:tilbakemelding@example.com?subject=${subject}&body=${body}`, "_self");
+    window.open(`mailto:kontakt@elbilvalg.no?subject=${subject}&body=${body}`, "_self");
     showToast("Takk for tilbakemeldingen!");
     document.getElementById("feedback-text").value = "";
     closeFeedback();
