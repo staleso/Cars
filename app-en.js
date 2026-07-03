@@ -1999,7 +1999,7 @@ function sendFeedback() {
     }
     const subject = encodeURIComponent(`Feedback - ${type}`);
     const body = encodeURIComponent(`Type: ${type}\n\n${text}\n\n---\nSent from EV Norway`);
-    window.open(`mailto:tilbakemelding@example.com?subject=${subject}&body=${body}`, "_self");
+    window.open(`mailto:kontakt@elbilvalg.no?subject=${subject}&body=${body}`, "_self");
     showToast("Thank you for your feedback!");
     document.getElementById("feedback-text").value = "";
     closeFeedback();
