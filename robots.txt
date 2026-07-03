@@ -2,5 +2,7 @@ User-agent: *
 Allow: /
 Disallow: /workout/
 Disallow: /scripts/
+Disallow: /bil.html?
+Disallow: /en/car.html?
 
 Sitemap: https://elbilvalg.no/sitemap.xml
